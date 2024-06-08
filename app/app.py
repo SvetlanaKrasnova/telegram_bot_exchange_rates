@@ -1,6 +1,6 @@
 import telebot
 from config.config import rates, TOKEN
-from src.x_rates_curr_convert import XRatesCurrencyConversion as CurrencyConversion
+from src.currency_conversion import CurrencyConversion
 from exceptions.exceptions import APIException
 
 bot = telebot.TeleBot(TOKEN)
@@ -27,19 +27,17 @@ def convert(message: telebot.types.Message):
         values = message.text.split(' ')
         if values.__len__() != 3:
             raise APIException('Слишком много параметров')
-    except APIException as e:
-        bot.reply_to(message, f"Ошибка пользователя\n{e}")
-    except Exception as e:
-        bot.reply_to(message, f'Не удалось обработать команду:\n{e}')
-    else:
 
         # Пример: рубль евро 1
         quote, base, amount = values
         total_base = CurrencyConversion.get_price(quote, base, amount)
+    except APIException as e:
+        bot.reply_to(message, f"Ошибка пользователя\n{e}")
 
-        text = f'Цена {amount} {quote} в {base} - {total_base}'
-
-        bot.send_message(message.chat.id, text)
+    except Exception as e:
+        bot.reply_to(message, f'Не удалось обработать команду:\n{e}')
+    else:
+        bot.send_message(message.chat.id, f'Цена {amount} {quote} в {base} - {total_base}')
 
 
 # start

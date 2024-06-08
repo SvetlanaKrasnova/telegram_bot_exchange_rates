@@ -1,12 +1,14 @@
-import requests
-import lxml.html
 from config.config import rates
 from exceptions.exceptions import APIException
+from interfaces.models import GetRequestAPI
+from interfaces.api import RapidAPI
 
-class XRatesCurrencyConversion:
+
+class CurrencyConversion:
     """
-    Взаимодействие с x-rates.com. Там беру актуальный курс валюты
+    Класс по конвертации валюты
     """
+
     @staticmethod
     def get_price(quote: str, base: str, amount: str):
         """
@@ -32,13 +34,13 @@ class XRatesCurrencyConversion:
         # Обработка ошибки, если ввели не 1, а что-то другое (строку)
         try:
             _amount = float(amount)
+            if _amount <= 0:
+                # не конвертирует отрицательные числа или "0"
+                raise ValueError()
         except ValueError:
             raise APIException(f'Не удалось обработать количество: "{amount}"')
 
-        html = requests.get(
-            f'https://www.x-rates.com/calculator/?from={currency_from}&to={currency_to}&amount={amount}')
-        tree = lxml.html.document_fromstring(html.content)
-
-        output_rslt = tree.find('.//span[@class="ccOutputRslt"]').text
-        output_trail = tree.find('.//span[@class="ccOutputTrail"]').text
-        return f'{output_rslt}{output_trail}'.strip()
+        return RapidAPI.get(GetRequestAPI(**{
+            'currency_from': currency_from,
+            'currency_to': currency_to,
+            'amount': amount})).result
