@@ -13,6 +13,7 @@ class RapidAPI:
         :param querystring: объект с входными параметрами
         :return: объект с рзультатом
         """
+        print('Запрос к rapidapi')
         host = "currency-conversion-and-exchange-rates.p.rapidapi.com"
         url = f"https://{host}/convert"
 

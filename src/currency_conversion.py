@@ -18,6 +18,8 @@ class CurrencyConversion:
         :param amount: количество переводимой валюты
         :return:
         """
+        quote = quote.lower().strip()
+        base = base.lower().strip()
         if quote == base:
             raise APIException(f'Невозможно перевести одинаковые валюты {base}.')
 
