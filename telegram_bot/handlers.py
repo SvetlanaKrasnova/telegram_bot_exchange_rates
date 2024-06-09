@@ -1,12 +1,10 @@
 import telebot
-from config.config import rates, TOKEN
+from config.config import rates
 from src.currency_conversion import CurrencyConversion
 from exceptions.exceptions import APIException
+from telegram_bot.create_bot import bot
 
-bot = telebot.TeleBot(TOKEN)
 
-
-@bot.message_handlers(commands=['start', 'help'])
 def help(message: telebot.types.Message):
     text = 'Чтобы начать работу введите команду боту в следующем формате:\n' \
            '<имя валюты, цену которой хотите узнать> ' \
@@ -16,12 +14,10 @@ def help(message: telebot.types.Message):
     bot.reply_to(message, text)
 
 
-@bot.message_handlers(commands=['values'])
 def values(message: telebot.types.Message):
-    bot.reply_to(message, 'Доступные валюты:' + '\n'.join(list(rates.keys())))
+    bot.reply_to(message, 'Доступные валюты:\n' + '\n'.join(list(rates.keys())))
 
 
-@bot.message_handlers(content_types=['text'])
 def convert(message: telebot.types.Message):
     try:
         values = message.text.split(' ')
@@ -40,6 +36,12 @@ def convert(message: telebot.types.Message):
         bot.send_message(message.chat.id, f'Цена {amount} {quote} в {base} - {total_base}')
 
 
-# start
-print('BOT START')
-bot.polling()
+def register_handlers(bot):
+    """
+    Функция для регистрации наших команд боту
+    :param bot: объект бота
+    :return:
+    """
+    bot.register_message_handler(help, commands=['start', 'help'])
+    bot.register_message_handler(values, commands=['values'])
+    bot.register_message_handler(convert, content_types=['text'])
