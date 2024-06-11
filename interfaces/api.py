@@ -1,13 +1,17 @@
 import requests
-from config.config import X_RAPID_API_KEY
 from interfaces.models import *
 from exceptions.exceptions import APIException
 
 
 class RapidAPI:
+    def __init__(self, api_key: str):
+        """
 
-    @staticmethod
-    def get(querystring: GetRequestAPI) -> ResponseRequestAPI:
+        :param api_key: Ключ для работы с api
+        """
+        self.api_key = api_key
+
+    def get(self, querystring: GetRequestAPI) -> ResponseRequestAPI:
         """
         Запрос на конвертацию валюты
         :param querystring: объект с входными параметрами
@@ -22,7 +26,7 @@ class RapidAPI:
                        "amount": querystring.amount}
 
         headers = {
-            "X-RapidAPI-Key": X_RAPID_API_KEY,
+            "X-RapidAPI-Key": self.api_key,
             "X-RapidAPI-Host": host
         }
         print(f'GET: {querystring}')

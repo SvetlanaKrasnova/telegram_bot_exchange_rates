@@ -1,0 +1,9 @@
+bot:
+  token: '<ваш токен к боту>'
+api:
+  x_rapid_api_key: "<ваш ключ к rapidapi.com>"
+rates: {
+  'рубль': 'RUB',
+  'евро': 'EUR',
+  'доллар': 'USD'
+}

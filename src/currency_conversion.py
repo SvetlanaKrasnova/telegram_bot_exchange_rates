@@ -1,4 +1,3 @@
-from config.config import rates
 from exceptions.exceptions import APIException
 from interfaces.models import GetRequestAPI
 from interfaces.api import RapidAPI
@@ -9,8 +8,16 @@ class CurrencyConversion:
     Класс по конвертации валюты
     """
 
-    @staticmethod
-    def get_price(quote: str, base: str, amount: str):
+    def __init__(self, api_key: str, rates: dict):
+        """
+
+        :param api_key: ключ к api
+        :param rates: словарь с валютами, с которыми бот работает
+        """
+        self.api = RapidAPI(api_key=api_key)
+        self.rates = rates
+
+    def get_price(self, quote: str, base: str, amount: str):
         """
         Метод возвращает возвращает нужную сумму в валюте
         :param quote: имя валюты, цену в которой надо узнать
@@ -24,12 +31,12 @@ class CurrencyConversion:
             raise APIException(f'Невозможно перевести одинаковые валюты {base}.')
 
         try:
-            currency_from = rates[quote]
+            currency_from = self.rates[quote]
         except KeyError:
             raise APIException(f'Не удалось обработать валюту "{quote}"')
 
         try:
-            currency_to = rates[base]
+            currency_to = self.rates[base]
         except KeyError:
             raise APIException(f'Не удалось обработать валюту "{base}"')
 
@@ -42,7 +49,6 @@ class CurrencyConversion:
         except ValueError:
             raise APIException(f'Не удалось обработать количество: "{amount}"')
 
-        return RapidAPI.get(GetRequestAPI(**{
-            'currency_from': currency_from,
-            'currency_to': currency_to,
-            'amount': amount})).result
+        return self.api.get(GetRequestAPI(**{'currency_from': currency_from,
+                                             'currency_to': currency_to,
+                                             'amount': amount})).result

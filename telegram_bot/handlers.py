@@ -1,8 +1,11 @@
 import telebot
-from config.config import rates
+from telegram_bot.bot import cfg
 from src.currency_conversion import CurrencyConversion
 from exceptions.exceptions import APIException
-from telegram_bot.create_bot import bot
+from telegram_bot.bot import bot
+
+cc = CurrencyConversion(api_key=cfg.api.x_rapid_api_key,
+                        rates=cfg.rates)
 
 
 def help_start(message: telebot.types.Message):
@@ -29,7 +32,7 @@ def values(message: telebot.types.Message):
     :return:
     """
     bot.reply_to(message,
-                 'Доступные валюты:\n' + '\n'.join([f'{i}. {el}' for i, el in enumerate(list(rates.keys()),
+                 'Доступные валюты:\n' + '\n'.join([f'{i}. {el}' for i, el in enumerate(list(cfg.rates.keys()),
                                                                                         start=1)]))
 
 
@@ -48,7 +51,7 @@ def convert(message: telebot.types.Message):
 
         # Пример: рубль евро 1
         quote, base, amount = values
-        total_base = CurrencyConversion.get_price(quote, base, amount)
+        total_base = cc.get_price(quote, base, amount)
     except APIException as e:
         bot.reply_to(message, f"Ошибка пользователя\n{e}")
 
