@@ -17,6 +17,7 @@ def help_start(message: telebot.types.Message):
     text = f'Приветствую тебя *{message.chat.username or message.chat.first_name}*!\n' \
            f'Чтобы начать работу введите команду боту в следующем формате:\n' \
            f'<имя валюты, цену которой хотите узнать>\n' \
+           f'<имя валюты, в которую нужно перевести>\n' \
            f'<количество переводимой валюты>\n\n' \
            f'*Пример команд:*\n' \
            f'"рубль евро 3"\n' \
@@ -47,13 +48,14 @@ def convert(message: telebot.types.Message):
         values = message.text.split()
         print(f'Текст запроса: "{message.text}" (количество параметров {values.__len__()})')
         if values.__len__() != 3:
-            raise APIException('Слишком много параметров')
+            raise APIException('Некорректный запрос.\n'
+                               'Чтобы узнать, как пользоваться ботом наберите команду /help')
 
         # Пример: рубль евро 1
         quote, base, amount = values
         total_base = cc.get_price(quote, base, amount)
     except APIException as e:
-        bot.reply_to(message, f"Ошибка пользователя\n{e}")
+        bot.reply_to(message, str(e))
 
     except Exception as e:
         bot.reply_to(message, f'Не удалось обработать команду:\n{e}')

@@ -28,7 +28,7 @@ class CurrencyConversion:
         quote = quote.lower().strip()
         base = base.lower().strip()
         if quote == base:
-            raise APIException(f'Невозможно перевести одинаковые валюты {base}.')
+            raise APIException(f'Невозможно перевести одинаковые валюты.')
 
         try:
             currency_from = self.rates[quote]
