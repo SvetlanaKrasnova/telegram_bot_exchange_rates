@@ -42,6 +42,10 @@ class CurrencyConversion:
 
         # Обработка ошибки, если ввели не 1, а что-то другое (строку)
         try:
+            if amount.__contains__(','):
+                amount = amount.replace(',', '.')
+                print(f'В количестве содержится ",". Пробуем преобразовать и получить курс от "{amount}"')
+
             _amount = float(amount)
             if _amount <= 0:
                 # не конвертирует отрицательные числа или "0"
