@@ -105,8 +105,8 @@ class CurrencyConversion:
             raise APIException(f'Не удалось обработать количество: "{amount}"')
 
         return RapidAPI.get({'currency_from': currency_from,
-                                             'currency_to': currency_to,
-                                             'amount': amount})['result']
+                             'currency_to': currency_to,
+                             'amount': amount})['result']
 
 
 # ------------ Сам бот ------------
