@@ -40,26 +40,11 @@ Telegram-бот предоставляет пользователю актуал
 telegram_bot_exchange_rates/
 ├── config/
 │   └── config.yaml
-├── exceptions/
-│   └── exceptions.py # Классы с описанием exceptions
 ├── files/ # Фалы для README.md
-├── interfaces/
-│   ├── api.py # Взаимодействие с api rapidapi.com
-│   └── models.py
-├── src/
-│   ├── currency_conversion.py # Класс по конвертации валют
-│   └── utils/
-│       └── config_loader/
-│           ├── config_loader.py # Класс по загрузке config.yaml
-│           └── models.py
-├── telegram_bot/
-│   ├── bot.py # Создание бота
-│   └── handlers.py # Его команды
-├── main.py
+├── extensions.py
 ├── README.md
 ├── requirements.txt
 ~~~
-
 
 ## Демонстрация
 #### Пример работы с ботом
